@@ -1,11 +1,10 @@
 name: Theme Check
 
 on:
-  pull_request:
-    branches: [ develop ]
+  workflow_call:
 
 jobs:
-  build:
+  theme_check:
 
     runs-on: ubuntu-latest
 
