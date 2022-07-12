@@ -4,7 +4,7 @@ on:
   workflow_call:
 
 jobs:
-  theme_check:
+  themeCheck:
 
     runs-on: ubuntu-latest
 
@@ -14,26 +14,31 @@ jobs:
 
     steps:
     - name: Checkout Code
-      uses: actions/checkout@v2
+      uses: actions/checkout@v3
 
     - name: Use Node.js ${{ matrix.node }}
       uses: actions/setup-node@v2-beta
       with:
         node-version: ${{ matrix.node }}
 
-    - name: NPM Cache
-      uses: actions/cache@v2
+    - name: NPM Cache Node Modules
+      id: cache-npm
+      uses: actions/cache@v3
+      env:
+        cache-name: cache-node-modules
       with:
         path: ~/.npm
         key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
         restore-keys: |
+          ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
           ${{ runner.os }}-node-
+          ${{ runner.os }}-
     
     - name: Install Stencil CLI Dependency
       run: npm install -g @bigcommerce/stencil-cli
 
     - name: Install Theme Dependencies
-      run: npm ci
+      run: npm install
 
     - name: Grunt Check - Stylelint/ESlint/Jest
       run: npx grunt check
