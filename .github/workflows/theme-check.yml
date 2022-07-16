@@ -17,29 +17,16 @@ jobs:
       uses: actions/checkout@v3
 
     - name: Use Node.js ${{ matrix.node }}
-      uses: actions/setup-node@v2-beta
+      uses: actions/setup-node@v3
       with:
         node-version: ${{ matrix.node }}
-        
-    - name: Get NPM Cache Dir
-      id: npm-cache-dir
-      run: |
-        echo "::set-output name=dir::$(npm config get cache)"
-    - uses: actions/cache@v3
-      id: npm-cache
-      with:
-        path: ${{ steps.npm-cache-dir.outputs.dir }}
-        key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
-        restore-keys: |
-          ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
-          ${{ runner.os }}-node-
-          ${{ runner.os }}-
-    
+        cache: 'npm'
+
     - name: Install Stencil CLI Dependency
       run: npm install -g @bigcommerce/stencil-cli
 
     - name: Install Theme Dependencies
-      run: npm install
+      run: npm ci
 
     - name: Grunt Check - Stylelint/ESlint/Jest
       run: npx grunt check
