@@ -1,4 +1,4 @@
-name: Theme Check
+name: Grunt Theme Check
 
 on:
   workflow_call:
@@ -20,14 +20,15 @@ jobs:
       uses: actions/setup-node@v2-beta
       with:
         node-version: ${{ matrix.node }}
-
-    - name: NPM Cache Node Modules
-      id: cache-npm
-      uses: actions/cache@v3
-      env:
-        cache-name: cache-node-modules
+        
+    - name: Get NPM Cache Dir
+      id: npm-cache-dir
+      run: |
+        echo "::set-output name=dir::$(npm config get cache)"
+    - uses: actions/cache@v3
+      id: npm-cache
       with:
-        path: ~/.npm
+        path: ${{ steps.npm-cache-dir.outputs.dir }}
         key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
         restore-keys: |
           ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
