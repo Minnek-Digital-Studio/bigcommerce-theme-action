@@ -25,7 +25,7 @@ jobs:
       run: npm install -g @bigcommerce/stencil-cli
 
     - name: Install Dependencies
-      run: npm install
+      run: npm ci
 
     - name: Connect to BigCommerce Store
       env:
@@ -33,7 +33,7 @@ jobs:
         TOKEN: ${{ secrets.STENCIL_ACCESS_TOKEN_PRODUCTION }}
       run: stencil init -u $URL -t $TOKEN -p 3000 -h https://api.bigcommerce.com
 
-    - name: Push Theme Live
+    - name: Push Stencil Theme to BigCommerce Store
       run: stencil push -a -d -c 1
 
   jira_deploy_prod:
@@ -51,7 +51,7 @@ jobs:
           echo "DEPLOY_STATE=successful" >> $GITHUB_ENV
           echo "Deploying to Production..."
       
-      - name: Failed Deployment
+      - name: Failed Jira Deployment
         if: failure()
         run: echo "DEPLOY_STATE=failed" >> $GITHUB_ENV
 
@@ -77,8 +77,8 @@ jobs:
         uses: HighwayThree/jira-upload-deployment-info@master
         with:
           cloud-instance-base-url: 'https://minnek.atlassian.net'
-          client-id: '${{ secrets.CLIENT_ID }}'
-          client-secret: '${{ secrets.CLIENT_SECRET }}'
+          client-id: '${{ secrets.JIRA_CLIENT_ID }}'
+          client-secret: '${{ secrets.JIRA_CLIENT_SECRET }}'
           deployment-sequence-number: '${{ github.run_id }}'
           update-sequence-number: '${{ github.run_id }}'
           issue-keys: "${{ steps.jira_keys.outputs.jira-keys }}"
