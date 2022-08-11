@@ -2,6 +2,11 @@ name: Production Deployment
 
 on:
   workflow_call:
+    secrets:
+      URL:
+        required: true
+      TOKEN:
+        required: true
 
 jobs:
   stencil_deploy_prod:
