@@ -40,9 +40,6 @@ jobs:
       run: npm ci
 
     - name: Connect to BigCommerce Store
-      env:
-        URL: ${{ secrets.STENCIL_STORE_URL_PRODUCTION }}
-        TOKEN: ${{ secrets.STENCIL_ACCESS_TOKEN_PRODUCTION }}
       run: stencil init -u $URL -t $TOKEN -p 3000 -h https://api.bigcommerce.com
 
     - name: Push Stencil Theme to BigCommerce Store
