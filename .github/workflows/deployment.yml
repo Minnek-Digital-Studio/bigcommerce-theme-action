@@ -15,23 +15,11 @@ jobs:
     - name: Checkout Code
       uses: actions/checkout@v3
 
-    - name: Set Node.js ${{ matrix.node }}
-      uses: actions/setup-node@v2-beta
+    - name: Use Node.js ${{ matrix.node }}
+      uses: actions/setup-node@v3
       with:
         node-version: ${{ matrix.node }}
-
-    - name: NPM Cache Node Modules
-      id: cache-npm
-      uses: actions/cache@v3
-      env:
-        cache-name: cache-node-modules
-      with:
-        path: ~/.npm
-        key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
-        restore-keys: |
-          ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
-          ${{ runner.os }}-node-
-          ${{ runner.os }}-
+        cache: 'npm'
     
     - name: Install Stencil CLI Dependency
       run: npm install -g @bigcommerce/stencil-cli
