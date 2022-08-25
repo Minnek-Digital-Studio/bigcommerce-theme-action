@@ -54,7 +54,7 @@ jobs:
       - name: test
         run: |
           echo ${{ secrets.CLIENT_ID }}
-          echo ${{ secrests.CLIENT_SECRET }}
+          echo ${{ secrets.CLIENT_SECRET }}
       
       - name: Push Deployment Info to Jira
         if: steps.jira_keys.outputs.jira-keys != ''
