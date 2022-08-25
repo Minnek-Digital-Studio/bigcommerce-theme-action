@@ -13,6 +13,10 @@ on:
         required: true
       TOKEN:
         required: true
+      CLIENT_ID:
+        required: true
+      CLIENT_SECRET:
+        required: true
 
 jobs:
   jira_deploy_prod:
@@ -40,8 +44,6 @@ jobs:
           commit-message: ${{inputs.jira-keys}}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          CLIENT_ID: ${{ secrets.JIRA_CLIENT_ID }}'
-          CLIENT_SECRET: ${{ secrets.JIRA_CLIENT_SECRET }}
 
       - name: Confirm Deploy State and Jira Key Values
         if: always()
@@ -51,8 +53,8 @@ jobs:
           
       - name: test
         run: |
-          echo ${{ env.CLIENT_ID }}
-          echo $CLIENT_SECRET
+          echo ${{ secrets.CLIENT_ID }}
+          echo ${{ secrests.CLIENT_SECRET }}
       
       - name: Push Deployment Info to Jira
         if: steps.jira_keys.outputs.jira-keys != ''
@@ -60,8 +62,8 @@ jobs:
         uses: HighwayThree/jira-upload-deployment-info@master
         with:
           cloud-instance-base-url: 'https://minnek.atlassian.net'
-          client-id: '${{ env.CLIENT_ID }}'
-          client-secret: '${{ env.SECRET }}'
+          client-id: '${{ secrets.CLIENT_ID }}'
+          client-secret: '${{ secrets.SECRET }}'
           deployment-sequence-number: '${{ github.run_id }}'
           update-sequence-number: '${{ github.run_id }}'
           issue-keys: "${{ steps.jira_keys.outputs.jira-keys }}"
