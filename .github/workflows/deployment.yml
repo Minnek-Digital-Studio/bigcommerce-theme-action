@@ -7,6 +7,7 @@ on:
         description: 'Enter the Jira Keys that are ready merged in this release.'
         required: true
         default: false
+        type: string
     secrets:
       URL:
         required: true
