@@ -46,6 +46,11 @@ jobs:
         run: |
           echo "DEPLOY_STATE: ${{env.DEPLOY_STATE}}"
           echo "Jira Keys: ${{steps.jira_keys.outputs.jira-keys}}"
+          
+      - name: test
+        run: |
+          echo '${{ secrets.JIRA_CLIENT_ID }}'
+          echo '${{ secrets.JIRA_CLIENT_SECRET }}'
       
       - name: Push Deployment Info to Jira
         if: steps.jira_keys.outputs.jira-keys != ''
