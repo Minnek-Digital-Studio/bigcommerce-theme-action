@@ -50,8 +50,6 @@ jobs:
 
       needs: stencil_deploy_prod
 
-      if: github.event_name == 'push' &&  github.ref == 'refs/heads/master'
-
       steps:
       - name: Deploy to Production Jira
         run: |
