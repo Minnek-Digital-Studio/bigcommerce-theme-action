@@ -2,6 +2,11 @@ name: Production Deployment
 
 on:
   workflow_call:
+    inputs:
+      jira-keys:
+        description: 'Enter the Jira Keys that are ready merged in this release.'
+        required: true
+        default: false
     secrets:
       URL:
         required: true
@@ -9,46 +14,8 @@ on:
         required: true
 
 jobs:
-  stencil_deploy_prod:
-    runs-on: ubuntu-latest
-
-    strategy:
-      matrix:
-        node: [14.x]
-
-    steps:
-    - name: Checkout code
-      uses: actions/checkout@v2
-
-    - name: Use Node.js ${{ matrix.node }}
-      uses: actions/setup-node@v2-beta
-      with:
-        node-version: ${{ matrix.node }}
-
-    - name: npm cache
-      uses: actions/cache@v2
-      with:
-        path: ~/.npm
-        key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
-        restore-keys: |
-          ${{ runner.os }}-node-
-    
-    - name: Install Stencil CLI Dependency
-      run: npm install -g @bigcommerce/stencil-cli
-
-    - name: Install Dependencies
-      run: npm ci
-
-    - name: Connect to BigCommerce Store
-      run: stencil init -u ${{ secrets.URL }} -t ${{ secrets.TOKEN }} -p 3000 -h https://api.bigcommerce.com
-
-    - name: Push Stencil Theme to BigCommerce Store
-      run: stencil push -a -d -c 1
-
   jira_deploy_prod:
       runs-on: ubuntu-latest
-
-      needs: stencil_deploy_prod
 
       steps:
       - name: Deploy to Production Jira
