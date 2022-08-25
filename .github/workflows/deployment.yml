@@ -36,6 +36,7 @@ jobs:
         with:
           is-pull-request: false
           parse-all-commits: true
+          commit-message: ${{inputs.jira-keys}}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
