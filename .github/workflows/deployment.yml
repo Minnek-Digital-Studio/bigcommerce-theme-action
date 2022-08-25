@@ -40,6 +40,8 @@ jobs:
           commit-message: ${{inputs.jira-keys}}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          CLIENT_ID: ${{ secrets.JIRA_CLIENT_ID }}'
+          CLIENT_SECRET: ${{ secrets.JIRA_CLIENT_SECRET }}
 
       - name: Confirm Deploy State and Jira Key Values
         if: always()
@@ -49,8 +51,8 @@ jobs:
           
       - name: test
         run: |
-          echo '${{ secrets.JIRA_CLIENT_ID }}'
-          echo '${{ secrets.JIRA_CLIENT_SECRET }}'
+          echo '$CLIENT_ID'
+          echo '$CLIENT_SECRET'
       
       - name: Push Deployment Info to Jira
         if: steps.jira_keys.outputs.jira-keys != ''
