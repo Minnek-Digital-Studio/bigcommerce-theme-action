@@ -33,7 +33,7 @@ jobs:
       run: npm install -g @bigcommerce/stencil-cli
 
     - name: Install Theme Dependencies
-      run: npm ci
+      run: npm install
 
     - name: Grunt Check - Stylelint/ESlint/Jest
       run: npx grunt check
