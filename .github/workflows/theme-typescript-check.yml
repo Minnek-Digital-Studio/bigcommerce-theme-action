@@ -55,7 +55,7 @@ jobs:
             "attachments": [
               {
                 "color": "#36a64f",
-                "text": "Theme Check have been completed successfully :rocket: on `${{ github.repository }}` - https://github.com/${{ github.repository }}/runs/${{ github.run_id }}?check_suite_focus=true#step:${{ github.job }}"
+                "text": "Theme Check have been completed successfully :rocket: on `${{ github.repository }}` - https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}/jobs/${{ github.job_id }}?pr=${{ github.event.pull_request.number }}"
               }
             ]
           }
@@ -73,7 +73,7 @@ jobs:
             "attachments": [
               {
                 "color": "#ff0000",
-                "text": "Theme Check have been failed :cry: on `${{ github.repository }}` - https://github.com/${{ github.repository }}/runs/${{ github.run_id }}?check_suite_focus=true#step:${{ github.job }}"
+                "text": "Theme Check have been failed :cry: on `${{ github.repository }}` - https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}/jobs/${{ github.job_id }}?pr=${{ github.event.pull_request.number }}"
               }
             ]
           }
