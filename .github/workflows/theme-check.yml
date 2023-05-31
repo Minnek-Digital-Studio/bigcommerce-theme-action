@@ -35,8 +35,44 @@ jobs:
     - name: Install Theme Dependencies
       run: npm install
 
-    - name: Grunt Check - Stylelint/ESlint/Jest
+    - name: Grunt Check - ESlint | Jest | Stylelint
       run: npx grunt check
 
-    - name: Validate Theme Bundles - Config/Schema/Size
+    - name: Validate Theme Bundles - Config | Schema | Theme Size
       run: npx stencil bundle --name bundle
+      
+    - name: Notify Success to Slack
+      if: success()
+      uses: 8398a7/action-slack@v3
+      with:
+        status: custom
+        fields: workflow,job,commit
+        custom_payload: |
+          {
+            "attachments": [
+              {
+                "color": "#36a64f",
+                "text": "Theme Check have been completed successfully :rocket: on `${{ github.repository }}` - https://github.com/${{ github.repository }}/runs/${{ github.run_id }}?check_suite_focus=true#step:${{ github.job }}"
+              }
+            ]
+          }
+      env:
+        SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+    
+    - name: Notify Failure to Slack
+      if: failure()
+      uses: 8398a7/action-slack@v3
+      with:
+        status: custom
+        fields: workflow,job,commit
+        custom_payload: |
+          {
+            "attachments": [
+              {
+                "color": "#ff0000",
+                "text": "Theme Check have been failed :cry: on `${{ github.repository }}` - https://github.com/${{ github.repository }}/runs/${{ github.run_id }}?check_suite_focus=true#step:${{ github.job }}"
+              }
+            ]
+          }
+      env:
+        SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
