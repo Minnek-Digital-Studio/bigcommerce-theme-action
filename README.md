@@ -23,6 +23,7 @@ on:
 jobs:
   theme_check:
     uses: Minnek-Digital-Studio/bigcommerce-action/.github/workflows/theme-check.yml@master
+    secrets: inherit
 ```
 
 ## About
