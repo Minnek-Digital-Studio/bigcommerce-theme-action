@@ -34,12 +34,12 @@ jobs:
 
     - name: Install Theme Dependencies
       run: npm install --legacy-peer-deps
-
-    - name: Grunt Check - ESlint | Jest | Stylelint
-      run: npx grunt check
       
     - name: Generate JavaScript Files
       run: npm run build:ts
+
+    - name: Grunt Check - ESlint | Jest | Stylelint
+      run: npx grunt check
 
     - name: Validate Theme Bundles - Config | Schema | Theme Size
       run: npx stencil bundle --name bundle
