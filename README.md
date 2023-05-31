@@ -22,7 +22,7 @@ on:
 
 jobs:
   theme_check:
-    uses: Minnek-Digital-Studio/bigcommerce-theme-action/.github/workflows/theme-check.yml@master
+    uses: Minnek-Digital-Studio/bigcommerce-action/.github/workflows/theme-check.yml@master
 ```
 
 ## About
