@@ -112,3 +112,39 @@ jobs:
           environment-id: 'prod'
           environment-display-name: 'Production'
           environment-type: 'production'
+          
+      - name: Notify Success to Slack
+        if: success()
+        uses: 8398a7/action-slack@v3
+        with:
+          status: custom
+          fields: workflow,job,commit
+          custom_payload: |
+            {
+              "attachments": [
+                {
+                  "color": "#36a64f",
+                  "text": "Deployment to `production` have been completed successfully :rocket: on `${{ github.repository }}` - https://github.com/${{ github.repository }}/runs/${{ github.run_id }}?check_suite_focus=true#step:${{ github.job }}"
+                }
+              ]
+            }
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+
+      - name: Notify Failure to Slack
+        if: failure()
+        uses: 8398a7/action-slack@v3
+        with:
+          status: custom
+          fields: workflow,job,commit
+          custom_payload: |
+            {
+              "attachments": [
+                {
+                  "color": "#ff0000",
+                  "text": "Deployment to `production` have been failed :cry: on `${{ github.repository }}` - https://github.com/${{ github.repository }}/runs/${{ github.run_id }}?check_suite_focus=true#step:${{ github.job }}"
+                }
+              ]
+            }
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
