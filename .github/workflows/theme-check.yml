@@ -33,7 +33,7 @@ jobs:
       run: npm install -g @bigcommerce/stencil-cli
 
     - name: Install Theme Dependencies
-      run: npm install
+      run: npm install --legacy-peer-deps
 
     - name: Grunt Check - ESlint | Jest | Stylelint
       run: npx grunt check
