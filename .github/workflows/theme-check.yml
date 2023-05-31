@@ -57,7 +57,7 @@ jobs:
             ]
           }
       env:
-        SLACK_WEBHOOK_URL: '${{ secrets.SLACK_WEBHOOK_URL }}'
+        SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
     
     - name: Notify Failure to Slack
       if: failure()
@@ -75,4 +75,4 @@ jobs:
             ]
           }
       env:
-        SLACK_WEBHOOK_URL: '${{ secrets.SLACK_WEBHOOK_URL }}'
+        SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
