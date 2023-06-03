@@ -3,7 +3,7 @@
     <picture>
       <source media="(prefers-color-scheme: dark)" srcset="https://assets.minnekdigital.com/logo-md.jpg">
       <img alt="Minnek Logo" src="https://assets.minnekdigital.com/logo-md.jpg">
-    </picture>    
+    </picture>
   </a>
 </p>
 
@@ -23,6 +23,23 @@ on:
 jobs:
   theme_check:
     uses: Minnek-Digital-Studio/bigcommerce-action/.github/workflows/theme-check.yml@master
+    secrets: inherit
+```
+
+### Setup Deployment
+
+```yml
+name: Deployment
+
+on:
+  pull_request:
+    branches:
+      - master
+      - test/**
+
+jobs:
+  deployment:
+    uses: Minnek-Digital-Studio/bigcommerce-action/.github/workflows/deployment.yml@master
     secrets: inherit
 ```
 
