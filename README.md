@@ -26,6 +26,21 @@ jobs:
     secrets: inherit
 ```
 
+### Setup Theme Check with TypeScript
+
+```yml
+name: Theme TypeScript Check
+
+on:
+  pull_request:
+    branches: [ develop ]
+
+jobs:
+  theme_check:
+    uses: Minnek-Digital-Studio/bigcommerce-action/.github/workflows/theme-typescript-check.yml@master
+    secrets: inherit
+```
+
 ### Setup Deployment
 
 ```yml
