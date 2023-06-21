@@ -69,7 +69,7 @@ jobs:
       run: stencil init -u ${{ secrets.URL }} -t ${{ secrets.TOKEN }} -p 3000 -h https://api.bigcommerce.com
 
     - name: Push Stencil Theme to BigCommerce Store
-      run: stencil push -a -d -c 1
+      run: echo "no" | stencil push
 
     - name: Notify Success to Slack
       if: success()
