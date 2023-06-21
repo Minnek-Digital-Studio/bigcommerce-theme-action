@@ -1,4 +1,4 @@
-name: Deployment to Production
+name: Deployment
 
 on:
   workflow_call:
