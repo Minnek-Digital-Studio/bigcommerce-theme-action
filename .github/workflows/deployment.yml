@@ -2,13 +2,6 @@ name: Deployment
 
 on:
   workflow_call:
-    secrets:
-      URL:
-        required: true
-      TOKEN:
-        required: true
-      SLACK_WEBHOOK_URL:
-        required: false
 
 jobs:
   changes_check:
