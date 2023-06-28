@@ -29,7 +29,6 @@ jobs:
 
     environment:
       name: production
-      url: "${{ secrets.URL }}"
 
     strategy:
       matrix:
