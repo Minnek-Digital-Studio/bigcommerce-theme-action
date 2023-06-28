@@ -20,6 +20,10 @@ jobs:
             deploy:
               - './templates/**'
               - './assets/**'
+              - './lang/**'
+              - './config.json'
+              - './schema.json'
+              - './package.json'
 
   production:
     runs-on: ubuntu-latest
