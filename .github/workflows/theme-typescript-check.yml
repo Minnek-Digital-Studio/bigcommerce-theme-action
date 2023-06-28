@@ -55,7 +55,7 @@ jobs:
             "attachments": [
               {
                 "color": "#36a64f",
-                "text": "Theme Check have been completed successfully :rocket: on `${{ github.repository }}` - Check the PR <${{ github.event.pull_request.html_url }}|#${{ github.event.pull_request.number }}> on this <https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}/|Workflow>"
+                "text": "Theme Check have been completed successfully :white_check_mark: on `${{ github.repository }}` - Check the PR <${{ github.event.pull_request.html_url }}|#${{ github.event.pull_request.number }}> on this <https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}/|Workflow>"
               }
             ]
           }
