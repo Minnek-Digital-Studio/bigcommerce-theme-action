@@ -55,7 +55,7 @@ jobs:
       run: npm install -g @bigcommerce/stencil-cli
 
     - name: Install Dependencies
-      run: npm install
+      run: npm install --legacy-peer-deps
 
     - name: Connect to BigCommerce Store
       run: stencil init -u ${{ secrets.URL }} -t ${{ secrets.TOKEN }} -p 3000 -h https://api.bigcommerce.com
