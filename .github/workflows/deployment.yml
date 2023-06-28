@@ -9,7 +9,6 @@ jobs:
 
     outputs:
       deploy: ${{ steps.changes.outputs.deploy }}
-      ts: ${{ steps.changes.outputs.ts }}
 
     steps:
       - uses: actions/checkout@v2
@@ -21,8 +20,6 @@ jobs:
             deploy:
               - './templates/**'
               - './assets/**'
-            ts:
-              - './tsconfig.json'
 
   production:
     runs-on: ubuntu-latest
@@ -61,8 +58,10 @@ jobs:
       run: npm install --legacy-peer-deps
       
     - name: Generate JavaScript Files
-      if: needs.changes_check.outputs.ts == 'true'
-      run: npm run build:ts
+      run: |
+        if [ -f "tsconfig.json" ]; then
+          npm run build:ts
+        fi
 
     - name: Connect to BigCommerce Store
       run: stencil init -u ${{ secrets.URL }} -t ${{ secrets.TOKEN }} -p 3000 -h https://api.bigcommerce.com
