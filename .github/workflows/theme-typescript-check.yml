@@ -10,7 +10,7 @@ jobs:
 
     strategy:
       matrix:
-        node: [16.x]
+        node: [18.x]
 
     steps:
     - name: Checkout code
@@ -34,7 +34,7 @@ jobs:
 
     - name: Install Theme Dependencies
       run: npm install --legacy-peer-deps
-      
+
     - name: Generate JavaScript Files
       run: npm run build:ts
 
@@ -43,7 +43,7 @@ jobs:
 
     - name: Validate Theme Bundles - Config | Schema | Theme Size
       run: npx stencil bundle --name bundle
-      
+
     - name: Notify Success to Slack
       if: success()
       uses: 8398a7/action-slack@v3

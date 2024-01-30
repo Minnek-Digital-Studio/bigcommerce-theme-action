@@ -36,7 +36,7 @@ jobs:
 
     strategy:
       matrix:
-        node: [16.x]
+        node: [18.x]
 
     steps:
     - name: Checkout Code
@@ -60,7 +60,7 @@ jobs:
 
     - name: Install Dependencies
       run: npm install --legacy-peer-deps
-      
+
     - name: Generate JavaScript Files
       # the mkdir is for preventing errors in creating the ysw folder.
       run: |
