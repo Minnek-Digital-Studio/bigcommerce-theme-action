@@ -29,12 +29,10 @@ jobs:
     if: needs.changes_check.outputs.cypress == 'true'
     needs: changes_check
 
-    environment:
-      name: production
-
     strategy:
       fail-fast: false
       matrix:
+        containers: [1, 2]
         node: [16.x]
 
     steps:
