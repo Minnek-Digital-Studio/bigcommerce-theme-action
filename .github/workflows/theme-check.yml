@@ -10,7 +10,7 @@ jobs:
 
     strategy:
       matrix:
-        node: [18.16.0]
+        node: [16.x]
 
     steps:
     - name: Checkout Code
