@@ -18,7 +18,7 @@ name: Theme Check
 
 on:
   pull_request:
-    branches: [ develop ]
+    branches: [ master ]
 
 jobs:
   theme_check:
@@ -33,7 +33,7 @@ name: Theme TypeScript Check
 
 on:
   pull_request:
-    branches: [ develop ]
+    branches: [ master ]
 
 jobs:
   theme_check:
@@ -57,6 +57,24 @@ jobs:
     uses: Minnek-Digital-Studio/bigcommerce-action/.github/workflows/deployment.yml@master
     secrets: inherit
 ```
+
+### Setup Cypress Test
+
+```yml
+name: Cypress Test
+
+on:
+  pull_request:
+    branches:
+      - master
+      - test/**
+
+jobs:
+  cypress:
+    uses: Minnek-Digital-Studio/bigcommerce-action/.github/workflows/cypress.yml@master
+    secrets: inherit
+```
+
 
 ## About
 
