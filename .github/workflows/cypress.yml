@@ -58,9 +58,6 @@ jobs:
       - name: Install Dependencies
         run: npm install --legacy-peer-deps
 
-      - name: Connect to BigCommerce Store
-        run: stencil init -u ${{ secrets.URL }} -t ${{ secrets.TOKEN }} -p 3000 -h https://api.bigcommerce.com
-
       - name: Cypress run
         uses: cypress-io/github-action@v6
         with:
