@@ -32,8 +32,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        containers: [1, 2]
-        node: [16.x]
+        node: [18.16.0]
 
     steps:
       - name: Checkout
@@ -65,7 +64,7 @@ jobs:
         uses: cypress-io/github-action@v6
         with:
           start: npm run start:dev
-          wait-on: 'http://localhost:3000'
+          wait-on: 'http://127.0.0.1:3000'
           record: true
           parallel: true
           install: false
