@@ -16,10 +16,6 @@ jobs:
       cypress: ${{ steps.changes.outputs.cypress }}
 
     steps:
-      - name: Will return success (Node version issues)
-        run: echo "just return success"
-        if: always()
-
       - uses: actions/checkout@v2
       - name: Check Files Changed
         id: changes
@@ -44,6 +40,10 @@ jobs:
         node: [18.16.0]
 
     steps:
+      - name: Will return success (Node version issues)
+        run: echo "just return success"
+        if: always()
+
       - name: Checkout
         uses: actions/checkout@v3
 
