@@ -42,7 +42,7 @@ jobs:
     steps:
       - name: Will return success (Node version issues)
         run: echo "just return success"
-        if: always()
+        if: false
 
       - name: Checkout
         uses: actions/checkout@v3
