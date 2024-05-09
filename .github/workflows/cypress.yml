@@ -44,41 +44,41 @@ jobs:
         run: echo "just return success"
         if: false
 
-      - name: Checkout
-        uses: actions/checkout@v3
+      # - name: Checkout
+      #   uses: actions/checkout@v3
 
-      - name: Use Node.js ${{ matrix.node }}
-        uses: actions/setup-node@v2-beta
-        with:
-          node-version: ${{ matrix.node }}
+      # - name: Use Node.js ${{ matrix.node }}
+      #   uses: actions/setup-node@v2-beta
+      #   with:
+      #     node-version: ${{ matrix.node }}
 
-      - name: NPM Cache
-        uses: actions/cache@v2
-        with:
-          path: ~/.npm
-          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
-          restore-keys: |
-            ${{ runner.os }}-node-
+      # - name: NPM Cache
+      #   uses: actions/cache@v2
+      #   with:
+      #     path: ~/.npm
+      #     key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+      #     restore-keys: |
+      #       ${{ runner.os }}-node-
 
-      - name: Install Stencil CLI Dependency
-        run: npm install -g @bigcommerce/stencil-cli
+      # - name: Install Stencil CLI Dependency
+      #   run: npm install -g @bigcommerce/stencil-cli
 
-      - name: Install Dependencies
-        run: npm install --legacy-peer-deps
+      # - name: Install Dependencies
+      #   run: npm install --legacy-peer-deps
 
-      - name: Connect to BigCommerce Store
-        run: stencil init -u ${{ secrets.URL }} -t ${{ secrets.TOKEN }} -p 3000 -h https://api.bigcommerce.com
+      # - name: Connect to BigCommerce Store
+      #   run: stencil init -u ${{ secrets.URL }} -t ${{ secrets.TOKEN }} -p 3000 -h https://api.bigcommerce.com
 
-      - name: Cypress run
-        uses: cypress-io/github-action@v6
-        with:
-          start: |
-            set NODE_OPTIONS='--openssl-legacy-provider'
-            npm run start:dev
-          wait-on: 'http://127.0.0.1:3000'
-          record: true
-          parallel: true
-          install: false
-        env:
-          CYPRESS_RECORD_KEY: ${{ secrets.CYPRESS_KEY }}
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      # - name: Cypress run
+      #   uses: cypress-io/github-action@v6
+      #   with:
+      #     start: |
+      #       set NODE_OPTIONS='--openssl-legacy-provider'
+      #       npm run start:dev
+      #     wait-on: 'http://127.0.0.1:3000'
+      #     record: true
+      #     parallel: true
+      #     install: false
+      #   env:
+      #     CYPRESS_RECORD_KEY: ${{ secrets.CYPRESS_KEY }}
+      #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
