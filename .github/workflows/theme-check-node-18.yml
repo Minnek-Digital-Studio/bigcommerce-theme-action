@@ -1,0 +1,78 @@
+name: Grunt Theme Check
+
+on:
+  workflow_call:
+
+jobs:
+  grunt_check:
+
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node: [18.x]
+
+    steps:
+    - name: Checkout Code
+      uses: actions/checkout@v2
+
+    - name: Use Node.js ${{ matrix.node }}
+      uses: actions/setup-node@v2-beta
+      with:
+        node-version: ${{ matrix.node }}
+
+    - name: NPM Cache
+      uses: actions/cache@v2
+      with:
+        path: ~/.npm
+        key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+        restore-keys: |
+          ${{ runner.os }}-node-
+
+    - name: Install Stencil CLI Dependency
+      run: npm install -g @bigcommerce/stencil-cli
+
+    - name: Install Theme Dependencies
+      run: npm install --legacy-peer-deps
+
+    - name: Grunt Check - ESlint | Jest | Stylelint
+      run: npx grunt check
+
+    - name: Validate Theme Bundles - Config | Schema | Theme Size
+      run: npx stencil bundle --name bundle
+
+    - name: Notify Success to Slack
+      if: success()
+      uses: 8398a7/action-slack@v3
+      with:
+        status: custom
+        fields: workflow,job,commit
+        custom_payload: |
+          {
+            "attachments": [
+              {
+                "color": "#36a64f",
+                "text": "Theme Check have been completed successfully :white_check_mark: on `${{ github.repository }}` - Check the PR <${{ github.event.pull_request.html_url }}|#${{ github.event.pull_request.number }}> on this <https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}/|Workflow>"
+              }
+            ]
+          }
+      env:
+        SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+
+    - name: Notify Failure to Slack
+      if: failure()
+      uses: 8398a7/action-slack@v3
+      with:
+        status: custom
+        fields: workflow,job,commit
+        custom_payload: |
+          {
+            "attachments": [
+              {
+                "color": "#ff0000",
+                "text": "Theme Check have been failed :cry: on `${{ github.repository }}` - Check the PR <${{ github.event.pull_request.html_url }}|#${{ github.event.pull_request.number }}> on this <https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}/|Workflow>"
+              }
+            ]
+          }
+      env:
+        SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
