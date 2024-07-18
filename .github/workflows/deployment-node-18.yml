@@ -1,0 +1,173 @@
+name: Deployment
+
+on:
+  workflow_call:
+
+jobs:
+  changes_check:
+    runs-on: ubuntu-latest
+
+    outputs:
+      deploy: ${{ steps.changes.outputs.deploy }}
+
+    steps:
+      - uses: actions/checkout@v2
+      - name: Check Files Changed
+        id: changes
+        uses: dorny/paths-filter@v2
+        with:
+          filters: |
+            deploy:
+              - './templates/**'
+              - './assets/**'
+              - './lang/**'
+              - './config.json'
+              - './schema.json'
+              - './package.json'
+
+  production:
+    runs-on: ubuntu-latest
+
+    if: github.ref == 'refs/heads/master' && needs.changes_check.outputs.deploy == 'true'
+    needs: changes_check
+
+    environment:
+      name: production
+
+    strategy:
+      matrix:
+        node: [18.x]
+
+    steps:
+    - name: Checkout Code
+      uses: actions/checkout@v2
+
+    - name: Use Node.js ${{ matrix.node }}
+      uses: actions/setup-node@v2-beta
+      with:
+        node-version: ${{ matrix.node }}
+
+    - name: NPM Cache
+      uses: actions/cache@v2
+      with:
+        path: ~/.npm
+        key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+        restore-keys: |
+          ${{ runner.os }}-node-
+
+    - name: Install Stencil CLI Dependency
+      run: npm install -g @bigcommerce/stencil-cli
+
+    - name: Install Dependencies
+      run: npm install --legacy-peer-deps
+
+    - name: Generate JavaScript Files
+      # the mkdir is for preventing errors in creating the ysw folder.
+      run: |
+        if [ -f "tsconfig.json" ]; then
+          mkdir ./assets/js/ysw; npm run build:ts
+        fi
+
+    - name: Connect to BigCommerce Store
+      run: stencil init -u ${{ secrets.URL }} -t ${{ secrets.TOKEN }} -p 3000 -h https://api.bigcommerce.com
+
+    - name: Push Stencil Theme to BigCommerce Store
+      run: echo "no" | stencil push -c 1
+
+    - name: Notify Success to Slack
+      if: success()
+      uses: 8398a7/action-slack@v3
+      with:
+        status: custom
+        fields: workflow,job,commit
+        custom_payload: |
+          {
+            "attachments": [
+              {
+                "color": "#36a64f",
+                "text": "Deployment to `Production` have been completed successfully :rocket: on `${{ github.repository }}` - https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+              }
+            ]
+          }
+      env:
+        SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+
+    - name: Notify Failure to Slack
+      if: failure()
+      uses: 8398a7/action-slack@v3
+      with:
+        status: custom
+        fields: workflow,job,commit
+        custom_payload: |
+          {
+            "attachments": [
+              {
+                "color": "#ff0000",
+                "text": "Deployment to `Production` have been failed :cry: on `${{ github.repository }}` - https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+              }
+            ]
+          }
+      env:
+        SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+
+  staging:
+    runs-on: ubuntu-latest
+
+    if: startsWith(github.ref, 'refs/heads/test/') && needs.changes_check.outputs.deploy == 'true'
+    needs: changes_check
+
+    environment:
+      name: staging
+
+    strategy:
+      matrix:
+        node: [18.x]
+
+    steps:
+    - name: Install SSH Key
+      uses: shimataro/ssh-key-action@v2
+      with:
+        key: ${{ secrets.STAGE_SERVER_SSH }}
+        known_hosts: 'placeholder'
+
+    - name: Adding Known Hosts
+      run: ssh-keyscan -H ${{ secrets.STAGE_SERVER_IP }} >> ~/.ssh/known_hosts
+
+    - name: Run Deploy Script
+      run: ssh -t git@${{ secrets.STAGE_SERVER_IP }} -p ${{ secrets.STAGE_SERVER_PORT }} bash ~/deploy.sh
+
+    - name: Notify Success to Slack
+      if: success()
+      uses: 8398a7/action-slack@v3
+      with:
+        status: custom
+        fields: workflow,job,commit
+        custom_payload: |
+          {
+            "attachments": [
+              {
+                "color": "#36a64f",
+                "text": "Deployment to `Staging` have been completed successfully :rocket: on `${{ github.repository }}` - https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+              }
+            ]
+          }
+      env:
+        SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+
+    - name: Notify Failure to Slack
+      if: failure()
+      uses: 8398a7/action-slack@v3
+      with:
+        status: custom
+        fields: workflow,job,commit
+        custom_payload: |
+          {
+            "attachments": [
+              {
+                "color": "#ff0000",
+                "text": "Deployment to `Staging` have been failed :cry: on `${{ github.repository }}` - https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+              }
+            ]
+          }
+      env:
+        SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
